@@ -7,21 +7,41 @@ if ($mysqli->connect_errno) {
 
 } else {
 	$query =
-		"SELECT DATE_FORMAT(downloaddate, '%Y%m%d') AS day, count(0) AS amount FROM twsnapshotdownloads
-		GROUP BY DATE_FORMAT(downloaddate, '%Y%m%d')
-		ORDER BY DATE_FORMAT(downloaddate, '%Y%m%d') DESC";
+		"SELECT DATE_FORMAT(downloaddate, '%Y-%m-%d') AS day, count(0) AS amount FROM twsnapshotdownloads
+		WHERE downloaddate > NOW() - INTERVAL 1 MONTH
+		GROUP BY DATE_FORMAT(downloaddate, '%Y-%m-%d')
+		ORDER BY DATE_FORMAT(downloaddate, '%Y-%m-%d') DESC";
 
 	if ($result = $mysqli->query($query)) {
 		while ($row = $result->fetch_assoc()) {
-			//printf ("%s (%s)<br>", $row["day"], $row["amount"]);
+			$row['day'] = date("d M Y", strtotime($row['day']));
+			
 			$downloads[] = $row;
 		}
 
 		$result->free();
 	}
+
+	$query =
+		"SELECT server, world, player, count(0) downloads, DATE_FORMAT(MIN(downloaddate), '%d %M %Y') AS FirstDate,
+					DATE_FORMAT(MAX(downloaddate), '%d %M %Y') AS LastDate
+		FROM twsnapshotdownloads
+		WHERE player<>''
+		GROUP BY server, world, player
+		HAVING downloads>5
+		ORDER BY MAX(downloaddate) DESC";
+
+	if ($result = $mysqli->query($query)) {
+		while ($row = $result->fetch_assoc()) {
+			$users[] = $row;
+		}
+
+		$result->free();
+	}
+
 	$mysqli->close();
 
 	$templates = new League\Plates\Engine('./templates');
-	echo $templates->render('stats', ['downloads' => $downloads]);
+	echo $templates->render('stats', ['downloads' => $downloads, 'users' => $users]);
 }
 ?>
