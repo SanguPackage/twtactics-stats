@@ -12,8 +12,8 @@
 		<div class="col-md-4">
 			<h2>Downloads per day</h2>
 
-			<table class="table">
-				<tr>
+			<table class="table table-hover">
+				<tr class="info">
 					<th>Day</th>
 					<th>Downloads</th>
 				</tr>
@@ -28,8 +28,8 @@
 		<div class="col-md-8">
 			<h2>Active Users</h2>
 
-			<table class="table">
-				<tr>
+			<table class="table table-hover">
+				<tr class="info">
 					<th>World</th>
 					<th>Player</th>
 					<th>Downloads</th>
