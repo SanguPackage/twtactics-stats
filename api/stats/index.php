@@ -1,7 +1,8 @@
 <?php
+require 'func.php';
 require 'vendor/autoload.php';
 
-$mysqli = new mysqli("localhost", "laoujin_laoujin", "KeepingTrackOfTheDownloads", "laoujin_twtactics");
+$mysqli = get_mysqli();
 if ($mysqli->connect_errno) {
 	echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 
@@ -15,7 +16,7 @@ if ($mysqli->connect_errno) {
 	if ($result = $mysqli->query($query)) {
 		while ($row = $result->fetch_assoc()) {
 			$row['day'] = date("d M Y", strtotime($row['day']));
-			
+
 			$downloads[] = $row;
 		}
 
