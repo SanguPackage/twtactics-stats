@@ -3,7 +3,7 @@
 <div class="jumbotron">
 	<div class="container">
 		<h1>TW Tactics Usage Stats</h1>
-		<p>Time to find out if anyone is actually using it...</p>
+		<p>Time to find out if anyone is actually using it... <a href="d3.html">(D3.js version)</a></p>
 	</div>
 </div>
 
