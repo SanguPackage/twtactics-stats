@@ -47,27 +47,4 @@ var serverUsage = function(rawData) {
     .style('writing-mode', 'tb')
     .style('text-anchor', 'start')
     .text(d => d[0]);
-
-  // bar.append('text')
-  //   .attr('transform', 'rotate(-90)')
-  //   .attr('y', height - 100)
-  //   //.attr('dy', '.71em')
-  //   .style('text-anchor', 'end')
-  //   .text(d => d[0]);
-
-  // var canvas = d3.select('#content')
-  //   .append('div')
-  //   .attr('class', 'chart');
-
-  // var x = d3.scale.linear()
-  //   .domain([0, maxValue])
-  //   .range([0, 400]);
-
-  // d3.select('.chart').selectAll('div')
-  //   .data(data)
-  //   .enter()
-  //     .append('div')
-  //     .style('width', d => 200 + 'px')
-  //     // .style('width', d => x(d[1]) + 'px')
-  //     .text(d => d[0] + ':' + d[1]);
 };

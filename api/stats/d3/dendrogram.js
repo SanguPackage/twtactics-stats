@@ -1,16 +1,6 @@
 var dendrogram = function(rawData) {
   function mapData(rawData) {
     var out = [];
-    // _.each(rawData, function(d) {
-    //   if (!out[d.server]) {
-    //     out[d.server] = {};
-    //   }
-    //   if (!out[d.server][d.player]) {
-    //     out[d.server][d.player] = 0;
-    //   }
-    //   out[d.server][d.player]++;
-    // });
-
     _.each(rawData, function(download) {
       var server = _.findWhere(out, {name: download.server});
       if (server) {
