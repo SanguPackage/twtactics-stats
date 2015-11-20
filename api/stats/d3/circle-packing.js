@@ -1,58 +1,85 @@
 var circlePacking = function(rawData) {
+  var minPlayerDownloadsFilter = 10;
+
   function mapData(rawData) {
     var out = [];
     _.each(rawData, function(download) {
       var server = _.findWhere(out, {name: download.server});
-      if (server) {
-        server.size++;
-
-        var player = _.findWhere(server.children, {name: download.player});
-        if (player) {
-          player.size++;
-          if (player.worlds.indexOf(download.world) === -1) {
-            player.worlds.push(download.world);
-          }
-          if (player.lastDownload < download.downloaddate) {
-            player.lastDownload = download.downloaddate;
-          }
-
-        } else {
-          player = {
-            isPlayer: true,
-            name: download.player,
-            lastDownload: download.downloaddate,
-            size: 1,
-            worlds: [download.world]
-          };
-          server.children.push(player);
-        }
-
-        // if (applyTextColorGradient(download.downloaddate)) {
-        //   if (!lastDownload || lastDownload < download.downloaddate) {
-        //     lastDownload = download.downloaddate;
-        //   }
-        //   if (!firstLastDownload || firstLastDownload > download.downloaddate) {
-        //     firstLastDownload = download.downloaddate;
-        //   }
-        // }
-      } else {
-        out.push({
+      if (!server) {
+        server = {
           isServer: true,
           name: download.server,
-          size: 1,
+          size: 0,
           children: []
-        });
+        };
+        out.push(server);
       }
+      server.size++;
+
+      var world = _.findWhere(server.children, {name: download.world});
+      if (!world) {
+        world = {
+          isWorld: true,
+          name: download.world,
+          size: 0,
+          children: []
+        };
+        server.children.push(world);
+      }
+      world.size++;
+
+      var tribe = _.findWhere(world.children, {name: download.tribe});
+      if (!tribe) {
+        tribe = {
+          isTribe: true,
+          name: download.tribe,
+          size: 0,
+          children: []
+        };
+        world.children.push(tribe);
+      }
+      tribe.size++;
+
+      var player = _.findWhere(tribe.children, {name: download.player});
+      if (player) {
+        player.size++;
+        if (player.lastDownload < download.downloaddate) {
+          player.lastDownload = download.downloaddate;
+        }
+
+      } else {
+        player = {
+          isPlayer: true,
+          name: download.player,
+          lastDownload: download.downloaddate,
+          size: 1
+        };
+        tribe.children.push(player);
+      }
+
+      // if (applyTextColorGradient(download.downloaddate)) {
+      //   if (!lastDownload || lastDownload < download.downloaddate) {
+      //     lastDownload = download.downloaddate;
+      //   }
+      //   if (!firstLastDownload || firstLastDownload > download.downloaddate) {
+      //     firstLastDownload = download.downloaddate;
+      //   }
+      // }
     });
 
-    // _.each(out, function(server) {
-    //   var maxPlayers = _.max(_.filter(server.children, d => d.name !== unknownPlayerOrTribe), d => d.amount);
-    //   if (!maxPlayerDownloads || maxPlayers.amount > maxPlayerDownloads) {
-    //     maxPlayerDownloads = maxPlayers.amount;
-    //   }
+    _.each(out, function(server) {
+      if (server.name.indexOf('tw') !== 0) {
+        server.name = server.name.substr(server.name.indexOf('.'));
+      } else {
+        server.name = server.name.replace('tw', '');
+      }
+      // var maxPlayers = _.max(_.filter(server.children, d => d.name !== unknownPlayerOrTribe), d => d.size);
+      // if (!maxPlayerDownloads || maxPlayers.size > maxPlayerDownloads) {
+      //   maxPlayerDownloads = maxPlayers.size;
+      // }
 
-    //   server.children = _.filter(server.children, p => p.amount > minPlayerDownloadsFilter);
-    // });
+      server.children = _.filter(server.children, p => p.size > minPlayerDownloadsFilter);
+    });
     // out = _.filter(out, server => server.children.length);
 
     return out;

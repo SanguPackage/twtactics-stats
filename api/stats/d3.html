@@ -23,13 +23,16 @@
 </div>
 
 <div class="container" id="content">
-	<!-- <h1>Monthly downloads</h1>
-	<svg id="line-chart"></svg>
-
 	<h1>Downloads per server</h1>
 	<a href="http://d3pie.org/#generator">Bake your own pie</a>
 	<div id="server-usage-pie"></div>
 	<svg id="server-usage"></svg>
+
+	<h1>Monthly downloads</h1>
+	<svg id="line-chart"></svg>
+
+	<h1>Zoomable Circle Packing</h1>
+	<svg id="circle-packing"></svg>
 
 	<h1>Cluster Dendrogram</h1>
 	<div>
@@ -37,10 +40,9 @@
 		<br>Bigger circle equals more downloads. Darker blue indicates a more recent last download.
 		Gray is over a month ago.
 	</div>
-	<svg id="dendrogram"></svg> -->
+	<svg id="dendrogram"></svg>
 
-	<h1>Zoomable Circle Packing</h1>
-	<svg id="circle-packing"></svg>
+
 </div>
 
 <script src="d3/line-chart.js"></script>
@@ -67,12 +69,12 @@
 			d.tribe = d.tribe || unknownPlayerOrTribe;
 		});
 		//console.log(data[0]);
-
-		circlePacking(data);
 		//serverUsage(data); // NOT IN USE: BarChart, not as cool as the PieChart
-		// serverUsagePie(data);
-		// dendrogram(data);
-		// lineChart(data);
+
+		serverUsagePie(data);
+		circlePacking(data);
+		dendrogram(data);
+		lineChart(data);
 	});
 </script>
 </body>
