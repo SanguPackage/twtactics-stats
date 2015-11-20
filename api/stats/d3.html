@@ -1,4 +1,4 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
 <head>
 	<title>D3.js TW Tactics Statistics</title>
@@ -10,6 +10,7 @@
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="bower_components/underscore/underscore-min.js" charset="utf-8"></script>
 </head>
 <body>
 <div class="jumbotron">
@@ -19,25 +20,16 @@
 	</div>
 </div>
 
-<div class="container" style="margin-top: -40px">
-	<div class="row">
+<div class="container" id="content"></div>
 
-
-	</div>
-
-	<hr>
-
-	<footer>
-	<p>&copy; Sangu 2015</p>
-	</footer>
-</div>
+<script src="d3/server-usage.js"></script>
+<link href="d3/server-usage.css" rel="stylesheet">
 
 <script type="text/javascript">
-$(function() {
 	$.get('api.php', function(data) {
-		console.log(data);
+		data = JSON.parse(data);
+		serverUsage(data);
 	});
-});
 </script>
 </body>
 </html>
