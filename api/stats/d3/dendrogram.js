@@ -83,7 +83,7 @@ var dendrogram = function(rawData) {
 
   var downloads = d3.scale.linear()
     .domain([minPlayerDownloadsFilter, maxPlayerDownloads])
-    .range([2, 10]);
+    .range([1, 14]);
 
   var radius = 960 / 2;
 
@@ -139,7 +139,7 @@ var dendrogram = function(rawData) {
         if (d.isServer) {
           return d.name + (d.amount ? ' (' + d.amount + ')' : '');
         } else if (d.isPlayer) {
-          return d.name + ': ' + d.worlds.join();
+          return d.name + ': ' + d.worlds.sort().join().replace(/[^0-9,]/g, '');
         }
         return d.name;
       })
@@ -148,7 +148,7 @@ var dendrogram = function(rawData) {
       .attr('y', 15)
       .text(function(d) {
         if (d.isPlayer) {
-          return d.amount + ' downls, last ' + d.lastDownload.fromNow();
+          return '▼' + d.amount + ', last ' + d.lastDownload.fromNow();
         }
         return '';
       });

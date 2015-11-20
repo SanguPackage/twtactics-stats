@@ -22,10 +22,15 @@
 </div>
 
 <div class="container" id="content">
-<!-- 	<h1>Downloads per server</h1>
-	<svg id="server-usage"></svg> -->
+	<h1>Downloads per server</h1>
+	<svg id="server-usage"></svg>
 
 	<h1>Cluster Dendrogram</h1>
+	<div>
+		Amount of downloads (▼), worlds played and last dowload date for all players per server.
+		<br>Bigger circle equals more downloads. Darker blue is more recent last download.
+		Gray is over a month ago.
+	</div>
 	<svg id="dendrogram"></svg>
 
 	<!-- <h1>Monthly downloads</h1> -->
@@ -48,7 +53,7 @@
 			d.tribe = d.tribe || unknownPlayerOrTribe;
 		});
 		//console.log(data[0]);
-		//serverUsage(data);
+		serverUsage(data);
 		dendrogram(data);
 	});
 </script>
