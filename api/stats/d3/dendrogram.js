@@ -63,6 +63,7 @@ var dendrogram = function(rawData) {
 
       server.children = _.filter(server.children, p => p.amount > minPlayerDownloadsFilter);
     });
+    out = _.filter(out, server => server.children.length);
 
     return out;
   }
