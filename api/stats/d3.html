@@ -38,10 +38,14 @@
 <link href="d3/dendrogram.css" rel="stylesheet">
 
 <script type="text/javascript">
+	var unknownPlayerOrTribe = '???';
 	$.get('api.php', function(data) {
 		data = JSON.parse(data);
 		_.each(data, function(d) {
+			d.server = d.server.replace('www.', '').replace('tribalwars', 'tw');
 			d.downloaddate = moment(d.downloaddate, 'YYYY-MM-DD HH:mm:ss');
+			d.player = d.player || unknownPlayerOrTribe;
+			d.tribe = d.tribe || unknownPlayerOrTribe;
 		});
 		//console.log(data[0]);
 		//serverUsage(data);

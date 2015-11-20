@@ -1,8 +1,10 @@
 var serverUsage = function(rawData) {
-  var data = _.countBy(rawData, v => v.server.replace('www.', ''));
+  var minServerDownloads = 30;
+
+  var data = _.countBy(rawData, v => v.server);
   var maxValue = _.max(_.values(data));
   data = _.pairs(data);
-  data = _.filter(data, d => d[1] > 30);
+  data = _.filter(data, d => d[1] > minServerDownloads);
   data = _.sortBy(data, d => -d[1]);
 
   //console.log(data);

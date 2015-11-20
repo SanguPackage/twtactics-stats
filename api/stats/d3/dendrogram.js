@@ -1,31 +1,52 @@
 var dendrogram = function(rawData) {
+  var minPlayerDownloads = 5;
+
   function mapData(rawData) {
     var out = [];
     _.each(rawData, function(download) {
       var server = _.findWhere(out, {name: download.server});
       if (server) {
+        server.amount++;
+
         var player = _.findWhere(server.children, {name: download.player});
         if (player) {
-          player.downloads++;
+          player.amount++;
+          if (player.name !== unknownPlayerOrTribe) {
+            if (player.worlds.indexOf(download.world) === -1) {
+              player.worlds.push(download.world);
+            }
+          }
+
         } else {
-          server.children.push({
+          player = {
             name: download.player,
-            downloads: 1
-          });
+            firstDownload: download.downloaddate,
+            lastDownload: download.downloaddate,
+            amount: 1
+          };
+          if (player.name !== unknownPlayerOrTribe) {
+            player.worlds = [download.world];
+          }
+          server.children.push(player);
         }
       } else {
         out.push({
           name: download.server,
+          amount: 1,
           children: []
         })
       }
+    });
+
+    _.each(out, function(server) {
+      server.children = _.filter(server.children, p => p.amount > minPlayerDownloads)
     });
 
     return out;
   }
 
   var data = {
-    name: 'tactics',
+    name: 'Sangu',
     children: mapData(rawData)
   };
 
@@ -61,13 +82,25 @@ var dendrogram = function(rawData) {
       .attr('transform', d => 'rotate(' + (d.x - 90) + ')translate(' + d.y + ')');
 
   node.append('circle')
-    .attr('r', 4.5);
+    .attr('r', function(d) {
+        if (!d.worlds) {
+          return 4.5;
+        }
+        return 4.5; //d.amount;
+    });
 
   node.append('text')
     .attr('dy', '.31em')
     .attr('text-anchor', d => d.x < 180 ? 'start' : 'end')
     .attr('transform', d => d.x < 180 ? 'translate(8)' : 'rotate(180)translate(-8)')
-    .text(d => d.name);
+    .text(function(d) {
+      var s = '';
+      if (d.worlds) {
+        s += d.worlds.join() + ': ';
+      }
+      s += d.name + (d.amount ? ' (' + d.amount + ')' : '');
+      return s;
+    });
 
   d3.select(self.frameElement).style('height', radius * 2 + 'px');
 };
