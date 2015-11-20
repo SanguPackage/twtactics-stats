@@ -2,7 +2,7 @@
   fill: steelblue;
 }
 
-#server-usage text {
+#server-usage text.amount {
   fill: white;
   font: 10px sans-serif;
   text-anchor: middle;
