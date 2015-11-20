@@ -1,8 +1,9 @@
 var dendrogram = function(rawData) {
-  var minPlayerDownloads = 10;
+  var minPlayerDownloadsFilter = 10;
   var downloadedLessThanDaysAgo = 30;
 
   var lastDownload, firstLastDownload;
+  var maxPlayerDownloads;
 
   function applyTextColorGradient(downloaddate) {
     return moment().diff(downloaddate, 'days') < downloadedLessThanDaysAgo;
@@ -50,12 +51,17 @@ var dendrogram = function(rawData) {
           name: download.server,
           amount: 1,
           children: []
-        })
+        });
       }
     });
 
     _.each(out, function(server) {
-      server.children = _.filter(server.children, p => p.amount > minPlayerDownloads)
+      var maxPlayers = _.max(_.filter(server.children, d => d.name !== unknownPlayerOrTribe), d => d.amount);
+      if (!maxPlayerDownloads || maxPlayers.amount > maxPlayerDownloads) {
+        maxPlayerDownloads = maxPlayers.amount;
+      }
+
+      server.children = _.filter(server.children, p => p.amount > minPlayerDownloadsFilter);
     });
 
     return out;
@@ -67,11 +73,16 @@ var dendrogram = function(rawData) {
   };
 
   //console.log(firstLastDownload + ' -> ' + lastDownload);
+  //console.log(minPlayerDownloadsFilter + ' -> ' + maxPlayerDownloads);
   //console.log(data);
 
   var color = d3.scale.linear()
     .domain([firstLastDownload.toDate().getTime(), lastDownload.toDate().getTime()])
     .range(['#26D0CE', '#1A2980']); // aqua marine
+
+  var downloads = d3.scale.linear()
+    .domain([minPlayerDownloadsFilter, maxPlayerDownloads])
+    .range([2, 10]);
 
   var radius = 960 / 2;
 
@@ -106,7 +117,10 @@ var dendrogram = function(rawData) {
         if (!d.isPlayer) {
           return 4.5;
         }
-        return 4.5; //d.amount;
+        if (d.name === unknownPlayerOrTribe) {
+          return 4.5;
+        }
+        return downloads(d.amount);
     });
 
   node.append('text')
