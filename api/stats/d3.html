@@ -23,12 +23,13 @@
 </div>
 
 <div class="container" id="content">
-	<h1>Monthly downloads</h1>
+	<!-- <h1>Monthly downloads</h1>
 	<svg id="line-chart"></svg>
 
 	<h1>Downloads per server</h1>
+	<a href="http://d3pie.org/#generator">Bake your own pie</a>
 	<div id="server-usage-pie"></div>
-	<!-- <svg id="server-usage"></svg> -->
+	<svg id="server-usage"></svg>
 
 	<h1>Cluster Dendrogram</h1>
 	<div>
@@ -36,12 +37,10 @@
 		<br>Bigger circle equals more downloads. Darker blue indicates a more recent last download.
 		Gray is over a month ago.
 	</div>
-	<svg id="dendrogram"></svg>
+	<svg id="dendrogram"></svg> -->
 
-	<!-- <h1>Server->World->Tribe->Player</h1>
-	Zoomable Circle Packing: http://bl.ocks.org/mbostock/7607535
-	Circle Packing: http://bl.ocks.org/mbostock/4063530 (tooltip only)
-	-->
+	<h1>Zoomable Circle Packing</h1>
+	<svg id="circle-packing"></svg>
 </div>
 
 <script src="d3/line-chart.js"></script>
@@ -49,6 +48,9 @@
 
 <script src="d3/dendrogram.js"></script>
 <link href="d3/dendrogram.css" rel="stylesheet">
+
+<script src="d3/circle-packing.js"></script>
+<link href="d3/circle-packing.css" rel="stylesheet">
 
 <script src="d3/server-usage.js"></script>
 <link href="d3/server-usage.css" rel="stylesheet">
@@ -66,10 +68,11 @@
 		});
 		//console.log(data[0]);
 
+		circlePacking(data);
 		//serverUsage(data); // NOT IN USE: BarChart, not as cool as the PieChart
-		serverUsagePie(data);
-		dendrogram(data);
-		lineChart(data);
+		// serverUsagePie(data);
+		// dendrogram(data);
+		// lineChart(data);
 	});
 </script>
 </body>
