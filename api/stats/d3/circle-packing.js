@@ -34,7 +34,8 @@ var circlePacking = function(rawData) {
           isTribe: true,
           name: download.tribe,
           size: 0,
-          children: []
+          children: [],
+          parent: world
         };
         world.children.push(tribe);
       }
@@ -52,7 +53,8 @@ var circlePacking = function(rawData) {
           isPlayer: true,
           name: download.player,
           lastDownload: download.downloaddate,
-          size: 1
+          size: 1,
+          parent: tribe
         };
         tribe.children.push(player);
       }
@@ -80,7 +82,6 @@ var circlePacking = function(rawData) {
 
       server.children = _.filter(server.children, p => p.size > minPlayerDownloadsFilter);
     });
-    // out = _.filter(out, server => server.children.length);
 
     return out;
   }
@@ -119,6 +120,30 @@ var circlePacking = function(rawData) {
       .attr('class', function(d) { return d.parent ? d.children ? 'node' : 'node node--leaf' : 'node node--root'; })
       .style('fill', function(d) { return d.children ? color(d.depth) : null; })
       .on('click', function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); });
+
+  circle.append('title')
+    .text(function(d) {
+      function getNameAndDownloads(d) {
+        return d.name + ': ▼ ' + d.size;
+      }
+
+      var tooltip = '';
+      if (d.isTribe) {
+        tooltip = d.parent.name + '\n';
+        tooltip += 'Tribe ' + getNameAndDownloads(d);
+        tooltip += '\nPlayers: ' + _.filter(d.children.map(d => d.name), d => d !== unknownPlayerOrTribe).join(', ');
+
+      } else if (d.isServer) {
+        tooltip = 'Server: ' + getNameAndDownloads(d);
+        if (d.children) {
+          tooltip += '\nWorlds: ' + d.children.map(d => d.name).join(', ');
+        }
+
+      } else {
+        tooltip = getNameAndDownloads(d);
+      }
+      return tooltip;
+    });
 
   var text = svg.selectAll('text')
     .data(nodes)
