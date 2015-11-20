@@ -13,45 +13,45 @@ var dendrogram = function(rawData) {
     var out = [];
     _.each(rawData, function(download) {
       var server = _.findWhere(out, {name: download.server});
-      if (server) {
-        server.amount++;
-
-        var player = _.findWhere(server.children, {name: download.player});
-        if (player) {
-          player.amount++;
-          if (player.worlds.indexOf(download.world) === -1) {
-            player.worlds.push(download.world);
-          }
-          if (player.lastDownload < download.downloaddate) {
-            player.lastDownload = download.downloaddate;
-          }
-
-        } else {
-          player = {
-            isPlayer: true,
-            name: download.player,
-            lastDownload: download.downloaddate,
-            amount: 1,
-            worlds: [download.world]
-          };
-          server.children.push(player);
-        }
-
-        if (applyTextColorGradient(download.downloaddate)) {
-          if (!lastDownload || lastDownload < download.downloaddate) {
-            lastDownload = download.downloaddate;
-          }
-          if (!firstLastDownload || firstLastDownload > download.downloaddate) {
-            firstLastDownload = download.downloaddate;
-          }
-        }
-      } else {
-        out.push({
+      if (!server) {
+        server = {
           isServer: true,
           name: download.server,
           amount: 1,
           children: []
-        });
+        };
+        out.push(server);
+      }
+      server.amount++;
+
+      var player = _.findWhere(server.children, {name: download.player});
+      if (player) {
+        player.amount++;
+        if (player.worlds.indexOf(download.world) === -1) {
+          player.worlds.push(download.world);
+        }
+        if (player.lastDownload < download.downloaddate) {
+          player.lastDownload = download.downloaddate;
+        }
+
+      } else {
+        player = {
+          isPlayer: true,
+          name: download.player,
+          lastDownload: download.downloaddate,
+          amount: 1,
+          worlds: [download.world]
+        };
+        server.children.push(player);
+      }
+
+      if (applyTextColorGradient(download.downloaddate)) {
+        if (!lastDownload || lastDownload < download.downloaddate) {
+          lastDownload = download.downloaddate;
+        }
+        if (!firstLastDownload || firstLastDownload > download.downloaddate) {
+          firstLastDownload = download.downloaddate;
+        }
       }
     });
 
