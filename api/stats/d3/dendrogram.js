@@ -1,5 +1,12 @@
 var dendrogram = function(rawData) {
   var minPlayerDownloads = 10;
+  var downloadedLessThanDaysAgo = 30;
+
+  var lastDownload, firstLastDownload;
+
+  function applyTextColorGradient(downloaddate) {
+    return moment().diff(downloaddate, 'days') < downloadedLessThanDaysAgo;
+  }
 
   function mapData(rawData) {
     var out = [];
@@ -28,6 +35,15 @@ var dendrogram = function(rawData) {
           };
           server.children.push(player);
         }
+
+        if (applyTextColorGradient(download.downloaddate)) {
+          if (!lastDownload || lastDownload < download.downloaddate) {
+            lastDownload = download.downloaddate;
+          }
+          if (!firstLastDownload || firstLastDownload > download.downloaddate) {
+            firstLastDownload = download.downloaddate;
+          }
+        }
       } else {
         out.push({
           isServer: true,
@@ -50,8 +66,12 @@ var dendrogram = function(rawData) {
     children: mapData(rawData)
   };
 
+  //console.log(firstLastDownload + ' -> ' + lastDownload);
+  //console.log(data);
 
-  console.log(data);
+  var color = d3.scale.linear()
+    .domain([firstLastDownload.toDate().getTime(), lastDownload.toDate().getTime()])
+    .range(['#26D0CE', '#1A2980']); // aqua marine
 
   var radius = 960 / 2;
 
@@ -91,6 +111,12 @@ var dendrogram = function(rawData) {
 
   node.append('text')
     .attr('dy', '.31em')
+    .attr('fill', function(d) {
+      if (d.lastDownload) {
+        return applyTextColorGradient(d.lastDownload) ? color(d.lastDownload) : 'lightgray';
+      }
+      return 'black';
+    })
     .attr('text-anchor', d => d.x < 180 ? 'start' : 'end')
     .attr('transform', d => d.x < 180 ? 'translate(8)' : 'rotate(180)translate(-8)')
     .append('tspan')
