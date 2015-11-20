@@ -17,30 +17,40 @@
 <div class="jumbotron">
 	<div class="container">
 		<h1>TW Tactics Usage Stats</h1>
-		<p>Time to find out if anyone is actually using it... <a href="/">(boring version)</a></p>
+		<p>Time to find out if anyone is actually using it... <a href="/">(back to boring version)</a></p>
 	</div>
 </div>
 
 <div class="container" id="content">
-	<h1>Downloads per server</h1>
-	<svg id="server-usage"></svg>
+	<h1>Monthly downloads</h1>
+	<svg id="line-chart"></svg>
 
 	<h1>Cluster Dendrogram</h1>
 	<div>
 		Amount of downloads (▼), worlds played and last dowload date for all players per server.
-		<br>Bigger circle equals more downloads. Darker blue is more recent last download.
+		<br>Bigger circle equals more downloads. Darker blue indicates a more recent last download.
 		Gray is over a month ago.
 	</div>
 	<svg id="dendrogram"></svg>
 
-	<!-- <h1>Monthly downloads</h1> -->
+	<h1>Downloads per server</h1>
+	Pie chart... ?
+	<svg id="server-usage"></svg>
+
+	<!-- <h1>Server->World->Tribe->Player</h1>
+	Zoomable Circle Packing: http://bl.ocks.org/mbostock/7607535
+	Circle Packing: http://bl.ocks.org/mbostock/4063530 (tooltip only)
+	-->
 </div>
 
-<script src="d3/server-usage.js"></script>
-<link href="d3/server-usage.css" rel="stylesheet">
+<script src="d3/line-chart.js"></script>
+<link href="d3/line-chart.css" rel="stylesheet">
 
 <script src="d3/dendrogram.js"></script>
 <link href="d3/dendrogram.css" rel="stylesheet">
+
+<script src="d3/server-usage.js"></script>
+<link href="d3/server-usage.css" rel="stylesheet">
 
 <script type="text/javascript">
 	var unknownPlayerOrTribe = '???';
@@ -53,8 +63,10 @@
 			d.tribe = d.tribe || unknownPlayerOrTribe;
 		});
 		//console.log(data[0]);
+
 		serverUsage(data);
 		dendrogram(data);
+		lineChart(data);
 	});
 </script>
 </body>

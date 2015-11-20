@@ -1,15 +1,15 @@
-.node circle {
+#dendrogram .node circle {
   fill: #fff;
   stroke: steelblue;
   stroke-width: 1.5px;
 }
 
-.node {
+#dendrogram .node {
   font: 10px sans-serif;
   font-weight: bold;
 }
 
-.link {
+#dendrogram .link {
   fill: none;
   stroke: #ccc;
   stroke-width: 1.5px;
