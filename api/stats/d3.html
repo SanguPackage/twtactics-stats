@@ -12,6 +12,7 @@
 	<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src="bower_components/underscore/underscore-min.js" charset="utf-8"></script>
 	<script src="bower_components/moment/min/moment.min.js" charset="utf-8"></script>
+	<script src="bower_components/d3pie/d3pie/d3pie.min.js" charset="utf-8"></script>
 </head>
 <body>
 <div class="jumbotron">
@@ -25,6 +26,10 @@
 	<h1>Monthly downloads</h1>
 	<svg id="line-chart"></svg>
 
+	<h1>Downloads per server</h1>
+	<div id="server-usage-pie"></div>
+	<!-- <svg id="server-usage"></svg> -->
+
 	<h1>Cluster Dendrogram</h1>
 	<div>
 		Amount of downloads (▼), worlds played and last dowload date for all players per server.
@@ -32,10 +37,6 @@
 		Gray is over a month ago.
 	</div>
 	<svg id="dendrogram"></svg>
-
-	<h1>Downloads per server</h1>
-	Pie chart... ?
-	<svg id="server-usage"></svg>
 
 	<!-- <h1>Server->World->Tribe->Player</h1>
 	Zoomable Circle Packing: http://bl.ocks.org/mbostock/7607535
@@ -51,6 +52,7 @@
 
 <script src="d3/server-usage.js"></script>
 <link href="d3/server-usage.css" rel="stylesheet">
+<script src="d3/server-usage-pie.js"></script>
 
 <script type="text/javascript">
 	var unknownPlayerOrTribe = '???';
@@ -64,7 +66,8 @@
 		});
 		//console.log(data[0]);
 
-		serverUsage(data);
+		//serverUsage(data); // NOT IN USE: BarChart, not as cool as the PieChart
+		serverUsagePie(data);
 		dendrogram(data);
 		lineChart(data);
 	});
