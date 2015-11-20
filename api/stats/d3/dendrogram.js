@@ -11,10 +11,8 @@ var dendrogram = function(rawData) {
         var player = _.findWhere(server.children, {name: download.player});
         if (player) {
           player.amount++;
-          if (player.name !== unknownPlayerOrTribe) {
-            if (player.worlds.indexOf(download.world) === -1) {
-              player.worlds.push(download.world);
-            }
+          if (player.worlds.indexOf(download.world) === -1) {
+            player.worlds.push(download.world);
           }
           if (player.lastDownload < download.downloaddate) {
             player.lastDownload = download.downloaddate;
@@ -22,17 +20,17 @@ var dendrogram = function(rawData) {
 
         } else {
           player = {
+            isPlayer: true,
             name: download.player,
             lastDownload: download.downloaddate,
-            amount: 1
+            amount: 1,
+            worlds: [download.world]
           };
-          if (player.name !== unknownPlayerOrTribe) {
-            player.worlds = [download.world];
-          }
           server.children.push(player);
         }
       } else {
         out.push({
+          isServer: true,
           name: download.server,
           amount: 1,
           children: []
@@ -85,7 +83,7 @@ var dendrogram = function(rawData) {
 
   node.append('circle')
     .attr('r', function(d) {
-        if (!d.worlds) {
+        if (!d.isPlayer) {
           return 4.5;
         }
         return 4.5; //d.amount;
@@ -97,19 +95,19 @@ var dendrogram = function(rawData) {
     .attr('transform', d => d.x < 180 ? 'translate(8)' : 'rotate(180)translate(-8)')
     .append('tspan')
       .text(function(d) {
-        var s = '';
-        if (d.worlds) {
-          s += d.worlds.join() + ': ';
+        if (d.isServer) {
+          return d.name + (d.amount ? ' (' + d.amount + ')' : '');
+        } else if (d.isPlayer) {
+          return d.name + ': ' + d.worlds.join();
         }
-        s += d.name + (d.amount ? ' (' + d.amount + ')' : '');
-        return s;
+        return d.name;
       })
     .append('tspan')
       .attr('x', 0)
       .attr('y', 15)
       .text(function(d) {
-        if (d.lastDownload) {
-          return 'Last: ' + d.lastDownload.fromNow();
+        if (d.isPlayer) {
+          return d.amount + ' downls, last ' + d.lastDownload.fromNow();
         }
         return '';
       });
