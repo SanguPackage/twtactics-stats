@@ -11,6 +11,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src="bower_components/underscore/underscore-min.js" charset="utf-8"></script>
+	<script src="bower_components/moment/min/moment.min.js" charset="utf-8"></script>
 </head>
 <body>
 <div class="jumbotron">
@@ -21,22 +22,30 @@
 </div>
 
 <div class="container" id="content">
-	<h1>Downloads per server</h1>
-	<svg id="server-usage"></svg>
+<!-- 	<h1>Downloads per server</h1>
+	<svg id="server-usage"></svg> -->
 
-	<h1>Cluster Dendogram</h1>
+	<h1>Cluster Dendrogram</h1>
+	<svg id="dendrogram"></svg>
 
-
-	<h1>Monthly downloads</h1>
+	<!-- <h1>Monthly downloads</h1> -->
 </div>
 
 <script src="d3/server-usage.js"></script>
 <link href="d3/server-usage.css" rel="stylesheet">
 
+<script src="d3/dendrogram.js"></script>
+<link href="d3/dendrogram.css" rel="stylesheet">
+
 <script type="text/javascript">
 	$.get('api.php', function(data) {
 		data = JSON.parse(data);
-		serverUsage(data);
+		_.each(data, function(d) {
+			d.downloaddate = moment(d.downloaddate, 'YYYY-MM-DD HH:mm:ss');
+		});
+		//console.log(data[0]);
+		//serverUsage(data);
+		dendrogram(data);
 	});
 </script>
 </body>
