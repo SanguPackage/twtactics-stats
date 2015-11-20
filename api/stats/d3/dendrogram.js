@@ -1,5 +1,5 @@
 var dendrogram = function(rawData) {
-  var minPlayerDownloads = 5;
+  var minPlayerDownloads = 10;
 
   function mapData(rawData) {
     var out = [];
@@ -16,11 +16,13 @@ var dendrogram = function(rawData) {
               player.worlds.push(download.world);
             }
           }
+          if (player.lastDownload < download.downloaddate) {
+            player.lastDownload = download.downloaddate;
+          }
 
         } else {
           player = {
             name: download.player,
-            firstDownload: download.downloaddate,
             lastDownload: download.downloaddate,
             amount: 1
           };
@@ -93,14 +95,24 @@ var dendrogram = function(rawData) {
     .attr('dy', '.31em')
     .attr('text-anchor', d => d.x < 180 ? 'start' : 'end')
     .attr('transform', d => d.x < 180 ? 'translate(8)' : 'rotate(180)translate(-8)')
-    .text(function(d) {
-      var s = '';
-      if (d.worlds) {
-        s += d.worlds.join() + ': ';
-      }
-      s += d.name + (d.amount ? ' (' + d.amount + ')' : '');
-      return s;
-    });
+    .append('tspan')
+      .text(function(d) {
+        var s = '';
+        if (d.worlds) {
+          s += d.worlds.join() + ': ';
+        }
+        s += d.name + (d.amount ? ' (' + d.amount + ')' : '');
+        return s;
+      })
+    .append('tspan')
+      .attr('x', 0)
+      .attr('y', 15)
+      .text(function(d) {
+        if (d.lastDownload) {
+          return 'Last: ' + d.lastDownload.fromNow();
+        }
+        return '';
+      });
 
   d3.select(self.frameElement).style('height', radius * 2 + 'px');
 };
