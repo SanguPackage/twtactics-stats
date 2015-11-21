@@ -56,8 +56,8 @@ var lineChartPerServer = function(rawData) {
 
   var line = d3.svg.line()
     .interpolate('basis')
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.downloads); });
+    .x(d => x(d.date))
+    .y(d => y(d.downloads));
 
   var svg = d3.select('#line-chart-server')
     .attr('width', width + margin.left + margin.right)
@@ -65,11 +65,11 @@ var lineChartPerServer = function(rawData) {
     .append('g')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  x.domain(d3.extent(data, function(d) { return d.date; }));
+  x.domain(d3.extent(data, d => d.date));
 
   y.domain([
-    d3.min(servers, function(c) { return d3.min(c.values, function(v) { return v.downloads; }); }),
-    d3.max(servers, function(c) { return d3.max(c.values, function(v) { return v.downloads; }); })
+    d3.min(servers, c => d3.min(c.values, v => v.downloads)),
+    d3.max(servers, c => d3.max(c.values, v => v.downloads))
   ]);
 
   svg.append('g')
@@ -94,12 +94,14 @@ var lineChartPerServer = function(rawData) {
 
   server.append('path')
     .attr('class', 'line')
-    .attr('d', function(d) { return line(d.values); })
-    .style('stroke', function(d) { return color(d.name); });
+    .attr('d', d => line(d.values))
+    .style('stroke', d => color(d.name))
+    .append('title')
+      .text(d => d.name);
 
   server.append('text')
-    .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-    .attr('transform', function(d) { return 'translate(' + x(d.value.date) + ',' + y(d.value.downloads) + ')'; })
+    .datum(d => ({name: d.name, value: d.values[d.values.length - 1]}))
+    .attr('transform', d => 'translate(' + x(d.value.date) + ',' + y(d.value.downloads) + ')')
     .attr('x', 3)
     .attr('dy', '.35em')
     .text(function(d) {
