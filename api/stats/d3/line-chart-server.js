@@ -52,6 +52,7 @@ var lineChartPerServer = function(rawData) {
 
   var yAxis = d3.svg.axis()
     .scale(y)
+    .ticks(20)
     .orient('left');
 
   var line = d3.svg.line()
