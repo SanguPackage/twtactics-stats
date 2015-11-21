@@ -19,30 +19,28 @@
 </head>
 <body>
 <div class="jumbotron">
-	<div class="container">
-		<h2>TW Tactics Usage Stats</h2>
-		<small>Fancy D3 Spielerij <a href="index.php">(back to boring version)</a></small>
-	</div>
+	<h2>TW Tactics Usage Stats</h2>
+	<small>Fancy D3 Spielerij <a href="index.php">(back to boring version)</a></small>
 </div>
 
 <div class="container" id="content">
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-12">
 			<h3>Downloads per server</h3> <small><a href="http://d3pie.org/#generator">Bake your own pie</a></small>
 			<div id="server-usage-pie"></div>
 			<svg id="server-usage" style="display: none"></svg>
 		</div>
-
-		<div class="col-md-8">
-			<h3>Monthly downloads</h3>
-			<svg id="line-chart"></svg>
-		</div>
 	</div>
 
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-lg-6">
 			<h3>Monthly downloads per server</h3>
 			<svg id="line-chart-server"></svg>
+		</div>
+
+		<div class="col-lg-6">
+			<h3>Monthly downloads</h3>
+			<svg id="line-chart"></svg>
 		</div>
 	</div>
 

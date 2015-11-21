@@ -7,7 +7,7 @@ var customTimeFormat = d3.time.format.multi([
 
 var lineChart = function(rawData) {
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
-      width = 790 - margin.left - margin.right,
+      width = 550 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
 
   var dataObject = _.countBy(rawData, d => d.downloaddate.format('YYYY-MM'));

@@ -36,8 +36,8 @@ var lineChartPerServer = function(rawData) {
   //console.log(servers);
 
   var margin = {top: 20, right: 80, bottom: 30, left: 50},
-      width = 960 - margin.left - margin.right,
-      height = 700 - margin.top - margin.bottom;
+      width = 700 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
 
   var x = d3.time.scale()
     .range([0, width]);
@@ -52,7 +52,7 @@ var lineChartPerServer = function(rawData) {
 
   var yAxis = d3.svg.axis()
     .scale(y)
-    .ticks(20)
+    .ticks(10)
     .orient('left');
 
   var line = d3.svg.line()
@@ -98,7 +98,10 @@ var lineChartPerServer = function(rawData) {
     .attr('d', d => line(d.values))
     .style('stroke', d => color(d.name))
     .append('title')
-      .text(d => d.name);
+      .text(function(d) {
+        var tooltip = d.name + '\n▼ ' + _.reduce(d.values, (memo, num) => memo + num.downloads, 0);
+        return tooltip;
+      });
 
   server.append('text')
     .datum(d => ({name: d.name, value: d.values[d.values.length - 1]}))
