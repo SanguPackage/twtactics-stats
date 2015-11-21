@@ -1,5 +1,6 @@
 var circlePacking = function(rawData) {
-  var minPlayerDownloadsFilter = 10;
+  //var minPlayerDownloadsFilter = 10;
+  var serverTooltipMaxWorlds = 10;
 
   function mapData(rawData) {
     var out = [];
@@ -44,30 +45,33 @@ var circlePacking = function(rawData) {
       var player = _.findWhere(tribe.children, {name: download.player});
       if (player) {
         player.size++;
-        if (player.lastDownload < download.downloaddate) {
-          player.lastDownload = download.downloaddate;
+        if (player.downloaddate < download.downloaddate) {
+          player.downloaddate = download.downloaddate;
         }
 
       } else {
         player = {
           isPlayer: true,
           name: download.player,
-          lastDownload: download.downloaddate,
+          downloaddate: download.downloaddate,
           size: 1,
           parent: tribe
         };
         tribe.children.push(player);
       }
-
-      // if (applyTextColorGradient(download.downloaddate)) {
-      //   if (!lastDownload || lastDownload < download.downloaddate) {
-      //     lastDownload = download.downloaddate;
-      //   }
-      //   if (!firstLastDownload || firstLastDownload > download.downloaddate) {
-      //     firstLastDownload = download.downloaddate;
-      //   }
-      // }
     });
+
+    function fixChildren(parent) {
+      if (parent.children) {
+        _.each(parent.children, function(c) {
+          fixChildren(c);
+        });
+      }
+      if (parent.children) {
+        parent.downloaddate = _.max(parent.children, d => d.downloaddate).downloaddate;
+      }
+    }
+    _.each(out, o => fixChildren(o));
 
     _.each(out, function(server) {
       if (server.name.indexOf('tw') !== 0) {
@@ -75,12 +79,8 @@ var circlePacking = function(rawData) {
       } else {
         server.name = server.name.replace('tw', '');
       }
-      // var maxPlayers = _.max(_.filter(server.children, d => d.name !== unknownPlayerOrTribe), d => d.size);
-      // if (!maxPlayerDownloads || maxPlayers.size > maxPlayerDownloads) {
-      //   maxPlayerDownloads = maxPlayers.size;
-      // }
 
-      server.children = _.filter(server.children, p => p.size > minPlayerDownloadsFilter);
+      //server.children = _.filter(server.children, p => p.size > minPlayerDownloadsFilter);
     });
 
     return out;
@@ -88,8 +88,11 @@ var circlePacking = function(rawData) {
 
   var root = {
     name: 'Sangu',
-    children: mapData(rawData)
+    children: mapData(rawData),
+    downloaddate: moment()
   };
+
+  //console.log(root);
 
   var margin = 20,
       diameter = 960;
@@ -124,19 +127,58 @@ var circlePacking = function(rawData) {
   circle.append('title')
     .text(function(d) {
       function getNameAndDownloads(d) {
-        return d.name + ': ▼ ' + d.size;
+        return d.name + ': ▼ ' + d.size + '. Last ' + d.downloaddate.fromNow();
       }
 
       var tooltip = '';
-      if (d.isTribe) {
-        tooltip = d.parent.name + '\n';
-        tooltip += 'Tribe ' + getNameAndDownloads(d);
-        tooltip += '\nPlayers: ' + _.filter(d.children.map(d => d.name), d => d !== unknownPlayerOrTribe).join(', ');
-
-      } else if (d.isServer) {
+      if (d.isServer) {
         tooltip = 'Server: ' + getNameAndDownloads(d);
         if (d.children) {
-          tooltip += '\nWorlds: ' + d.children.map(d => d.name).join(', ');
+          tooltip += '\n\nWorlds: (' + d.children.length + ')';
+          _.each(_.first(_.sortBy(d.children, c => -c.downloaddate), serverTooltipMaxWorlds), function(c) {
+            tooltip += '\n' + getNameAndDownloads(c);
+          });
+          if (d.children.length > serverTooltipMaxWorlds) {
+            tooltip += '\n...';
+          }
+        }
+
+      } else if (d.isWorld) {
+        tooltip = 'World: ' + getNameAndDownloads(d);
+        if (d.children) {
+          var playersInWorld = [];
+          _.each(d.children, function(tribe) {
+            playersInWorld = playersInWorld.concat(tribe.children);
+          });
+
+          tooltip += '\n\nTribe > Player: (' + playersInWorld.length + ')';
+
+          _.each(_.first(_.sortBy(playersInWorld, p => -p.downloaddate), serverTooltipMaxWorlds), function(c) {
+            tooltip += '\n';
+            if (c.parent.name !== unknownPlayerOrTribe) {
+              tooltip += c.parent.name + ' > '
+            }
+            tooltip += getNameAndDownloads(c);
+          });
+          if (playersInWorld.length > serverTooltipMaxWorlds) {
+            tooltip += '\n...';
+          }
+        }
+
+      } else if (d.isTribe) {
+        tooltip = 'World: ' + d.parent.name + '\n';
+        tooltip += 'Tribe: ' + d.name;
+        if (d.children.length === 1) {
+          tooltip += '\n' + getNameAndDownloads(d.children[0]);
+
+        } else {
+          tooltip += '\n\nPlayers: (' + d.children.length + ')';
+          _.each(_.first(_.sortBy(d.children, c => -c.downloaddate), serverTooltipMaxWorlds), function(c) {
+            tooltip += '\n' + getNameAndDownloads(c);
+          });
+          if (d.children.length > serverTooltipMaxWorlds) {
+            tooltip += '\n...';
+          }
         }
 
       } else {

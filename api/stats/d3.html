@@ -24,23 +24,23 @@
 
 <div class="container" id="content">
 	<!-- Hierarchical Pie: http://bl.ocks.org/adewes/4710330 -->
-	<!-- <h1>Downloads per server</h1> <small><a href="http://d3pie.org/#generator">Bake your own pie</a></small>
+	<h1>Downloads per server</h1> <small><a href="http://d3pie.org/#generator">Bake your own pie</a></small>
 	<div id="server-usage-pie"></div>
-	<svg id="server-usage"></svg>
+	<svg id="server-usage" style="display: none"></svg>
 
 	<h1>Monthly downloads</h1>
-	<svg id="line-chart"></svg> -->
+	<svg id="line-chart"></svg>
 
 	<h1>Zoomable Circle Packing</h1>
 	<svg id="circle-packing"></svg>
 
-	<!-- <h1>Cluster Dendrogram</h1>
+	<h1>Cluster Dendrogram</h1>
 	<div>
 		Amount of downloads (▼), worlds played and last dowload date for all players per server.
 		<br>Bigger circle equals more downloads. Darker blue indicates a more recent last download.
 		Gray is over a month ago.
 	</div>
-	<svg id="dendrogram"></svg> -->
+	<svg id="dendrogram"></svg>
 
 
 </div>
@@ -72,9 +72,9 @@
 		//serverUsage(data); // NOT IN USE: BarChart, not as cool as the PieChart
 
 		circlePacking(data);
-		// serverUsagePie(data);
-		// dendrogram(data);
-		// lineChart(data);
+		serverUsagePie(data);
+		dendrogram(data);
+		lineChart(data);
 	});
 </script>
 </body>
