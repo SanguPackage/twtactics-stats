@@ -213,7 +213,7 @@ var circlePacking = function(rawData) {
         return function(t) { zoomTo(i(t)); };
       });
 
-    transition.selectAll('text')
+    transition.selectAll('#circle-packing text')
       .filter(function(d) { return d.parent === focus || this.style.display === 'inline'; })
         .style('fill-opacity', function(d) { return d.parent === focus ? 1 : 0; })
         .each('start', function(d) { if (d.parent === focus) this.style.display = 'inline'; })
