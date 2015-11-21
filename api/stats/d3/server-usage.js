@@ -1,3 +1,6 @@
+// use instead:
+// d3.layout.histogram().bins(5)(map)
+
 var serverUsage = function(rawData) {
   var minServerDownloads = 30;
 
