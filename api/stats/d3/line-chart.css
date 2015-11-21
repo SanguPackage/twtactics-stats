@@ -32,3 +32,7 @@
   stroke: steelblue;
   stroke-width: 1.5px;
 }
+
+#line-chart-server .line:hover {
+  stroke-width: 4px;
+}

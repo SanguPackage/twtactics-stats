@@ -1,5 +1,6 @@
 var lineChartPerServer = function(rawData) {
-  var minMonthlyDownloads = 40;
+  const minMonthlyDownloads = 40;
+  const minLastDownloadsToShowServerName = 15;
 
   var dataObject = _.groupBy(rawData, d => d.downloaddate.format('YYYY-MM'));
   //console.log(dataObject)
@@ -101,5 +102,10 @@ var lineChartPerServer = function(rawData) {
     .attr('transform', function(d) { return 'translate(' + x(d.value.date) + ',' + y(d.value.downloads) + ')'; })
     .attr('x', 3)
     .attr('dy', '.35em')
-    .text(function(d) { return d.name; });
+    .text(function(d) {
+      if (d.value.downloads < minLastDownloadsToShowServerName) {
+        return '';
+      }
+      return d.name;
+    });
 };
