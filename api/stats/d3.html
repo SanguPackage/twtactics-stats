@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<!-- TODO? Hierarchical Pie: http://bl.ocks.org/adewes/4710330 -->
+
 	<meta charset="UTF-8">
 	<title>D3.js TW Tactics Statistics</title>
 
@@ -18,32 +20,50 @@
 <body>
 <div class="jumbotron">
 	<div class="container">
-		<h1>TW Tactics Usage Stats</h1>
-		<p>Time to find out if anyone is actually using it... <a href="index.php">(back to boring version)</a></p>
+		<h2>TW Tactics Usage Stats</h2>
+		<small>Fancy D3 Spielerij <a href="index.php">(back to boring version)</a></small>
 	</div>
 </div>
 
 <div class="container" id="content">
-	<!-- Hierarchical Pie: http://bl.ocks.org/adewes/4710330 -->
-	<h1>Downloads per server</h1> <small><a href="http://d3pie.org/#generator">Bake your own pie</a></small>
-	<div id="server-usage-pie"></div>
-	<svg id="server-usage" style="display: none"></svg>
+	<div class="row">
+		<div class="col-md-4">
+			<h3>Downloads per server</h3> <small><a href="http://d3pie.org/#generator">Bake your own pie</a></small>
+			<div id="server-usage-pie"></div>
+			<svg id="server-usage" style="display: none"></svg>
+		</div>
 
-	<h1>Monthly downloads</h1>
-	<svg id="line-chart"></svg>
-
-	<h1>Zoomable Circle Packing</h1>
-	<svg id="circle-packing"></svg>
-
-	<h1>Cluster Dendrogram</h1>
-	<div>
-		Amount of downloads (▼), worlds played and last dowload date for all players per server.
-		<br>Bigger circle equals more downloads. Darker blue indicates a more recent last download.
-		Gray is over a month ago.
+		<div class="col-md-8">
+			<h3>Monthly downloads</h3>
+			<svg id="line-chart"></svg>
+		</div>
 	</div>
-	<svg id="dendrogram"></svg>
 
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Monthly downloads per server</h3>
+			<svg id="line-chart-server"></svg>
+		</div>
+	</div>
 
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Zoomable Circle Packing</h3>
+			<svg id="circle-packing"></svg>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Cluster Dendrogram</h3>
+			<div>
+				Amount of downloads (▼), worlds played and last dowload date for all players per server.
+				<br>Bigger circle equals more downloads. Darker blue indicates a more recent last download.
+				Gray is over a month ago.
+			</div>
+			<svg id="dendrogram"></svg>
+		</div>
+	</div>
 </div>
 
 <script src="d3/line-chart.js"></script>
@@ -76,6 +96,7 @@
 		serverUsagePie(data);
 		dendrogram(data);
 		lineChart(data);
+		lineChartPerServer(data);
 	});
 </script>
 </body>

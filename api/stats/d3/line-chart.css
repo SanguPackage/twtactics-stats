@@ -14,3 +14,21 @@
   stroke: steelblue;
   stroke-width: 1.5px;
 }
+
+
+#line-chart-server .axis path,
+#line-chart-server .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+#line-chart-server .x.axis path {
+  display: none;
+}
+
+#line-chart-server .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
