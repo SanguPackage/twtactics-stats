@@ -16,6 +16,8 @@
 	<script src="bower_components/underscore/underscore-min.js" charset="utf-8"></script>
 	<script src="bower_components/moment/min/moment.min.js" charset="utf-8"></script>
 	<script src="bower_components/d3pie/d3pie/d3pie.min.js" charset="utf-8"></script>
+	<script src="bower_components/topojson/topojson.js" charset="utf-8"></script>
+	<script src="bower_components/datamaps/dist/datamaps.world.min.js" charset="utf-8"></script>
 </head>
 <body>
 <div class="jumbotron">
@@ -25,10 +27,15 @@
 
 <div class="container" id="content">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-4" style="vertical-align: top">
 			<h3>Downloads per server</h3> <small><a href="http://d3pie.org/#generator">Bake your own pie</a></small>
 			<div id="server-usage-pie"></div>
 			<svg id="server-usage" style="display: none"></svg>
+		</div>
+
+		<div class="col-md-8">
+			<h3>Usage in the world</h3>
+			<div id="worldmap" style="position: relative; width: 500px; height: 300px;"></div>
 		</div>
 	</div>
 
@@ -78,6 +85,8 @@
 <link href="d3/server-usage.css" rel="stylesheet">
 <script src="d3/server-usage-pie.js"></script>
 
+<script src="d3/worldmap.js"></script>
+
 <script type="text/javascript">
 	var unknownPlayerOrTribe = '???';
 	$.get('api.php', function(data) {
@@ -91,6 +100,7 @@
 		//console.log(data[0]);
 		//serverUsage(data); // NOT IN USE: BarChart, not as cool as the PieChart
 
+		worldMap(data);
 		circlePacking(data);
 		serverUsagePie(data);
 		dendrogram(data);

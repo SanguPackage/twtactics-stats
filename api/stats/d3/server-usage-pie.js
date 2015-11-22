@@ -20,7 +20,8 @@ var serverUsagePie = function(rawData) {
       'location': 'bottom-left'
     },
     'size': {
-      'canvasWidth': 590,
+      'canvasWidth': 350,
+      'canvasHeight': 350,
       'pieInnerRadius': '9%',
       'pieOuterRadius': '90%'
     },

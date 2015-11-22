@@ -13,3 +13,8 @@ h1, h2, h3 {
 	width: 100%;
 	padding: 3px;
 }
+
+/* worldmap.js */
+.hoverinfo {
+	width: 250px;
+}
