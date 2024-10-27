@@ -1,10 +1,10 @@
 <?php
 function get_mysqli() {
-	$host = 'localhost';
-	$username = 'laoujin_laoujin';
-	$password = 'KeepingTrackOfTheDownloads';
-	$dbname = 'laoujin_twtactics';
-	$port = 33060;
+	$host = 'sangu.be.mysql';
+	$username = 'sangu_betwtactics';
+	$password = '';
+	$dbname = 'sangu_betwtactics';
+	$port = 3306;
 
 	if ($_SERVER["REMOTE_ADDR"] != "127.0.0.1" && $_SERVER["REMOTE_ADDR"] != "::1") {
 		$port = 3306;
