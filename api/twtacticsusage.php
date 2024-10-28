@@ -11,8 +11,11 @@ else
 	{
 		$stmt -> bind_param("sssss", $_POST['server'], $_POST['world'], $_POST['player'], $_POST['tribe'], $_SERVER['REMOTE_ADDR']);
 		$stmt -> execute();
-	}
 
+		// if (!$stmt->execute()) {
+		// 	echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+		// }
+	}
 	$mysqli -> close();
 }
 ?>
