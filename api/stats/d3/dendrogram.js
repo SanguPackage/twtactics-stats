@@ -1,5 +1,7 @@
 var dendrogram = function(rawData) {
-  var minPlayerDownloadsFilter = 10;
+  // Only the most dedicated users (>40 downloads); at lower cutoffs the radial tree
+  // has 100+ leaves and the labels collide into an unreadable mess.
+  var minPlayerDownloadsFilter = 40;
 
   var lastDownload, firstLastDownload;
   var maxPlayerDownloads;
