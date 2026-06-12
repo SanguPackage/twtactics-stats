@@ -77,8 +77,11 @@ var dendrogram = function(rawData) {
   //console.log(minPlayerDownloadsFilter + ' -> ' + maxPlayerDownloads);
   //console.log(data);
 
+  // firstLastDownload/lastDownload are only set for downloads in the last 30 days; when
+  // the newest data is older than that they stay undefined. color() is only used for
+  // recent players (line ~131), so fall back to now() here just to keep the scale valid.
   var color = d3.scale.linear()
-    .domain([firstLastDownload.toDate().getTime(), lastDownload.toDate().getTime()])
+    .domain([(firstLastDownload || moment()).toDate().getTime(), (lastDownload || moment()).toDate().getTime()])
     .range(['#26D0CE', '#1A2980']); // aqua marine
 
   var downloads = d3.scale.linear()
