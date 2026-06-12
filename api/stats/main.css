@@ -18,3 +18,20 @@ h1, h2, h3 {
 .hoverinfo {
 	width: 250px;
 }
+
+/* all-time retrospective stat band */
+.stat-band {
+	margin: 20px 0 25px;
+}
+.stat-band .stat-number {
+	font-size: 30px;
+	font-weight: bold;
+	line-height: 1.1;
+	color: #1A2980;
+}
+h2 {
+	margin: 15px 0 8px;
+}
+.bar:hover {
+	fill: #26D0CE !important;
+}
