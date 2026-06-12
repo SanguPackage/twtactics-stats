@@ -1,12 +1,14 @@
 var dendrogram = function(rawData) {
   var minPlayerDownloadsFilter = 10;
-  var downloadedLessThanDaysAgo = 30;
 
   var lastDownload, firstLastDownload;
   var maxPlayerDownloads;
 
+  // Color every player by how recent their last download is, relative to the whole
+  // dataset (the data is an archive, so "within the last 30 days of now" is always
+  // false and would leave the whole tree gray).
   function applyTextColorGradient(downloaddate) {
-    return moment().diff(downloaddate, 'days') < downloadedLessThanDaysAgo;
+    return true;
   }
 
   function mapData(rawData) {

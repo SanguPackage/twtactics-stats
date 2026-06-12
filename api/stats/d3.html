@@ -26,6 +26,15 @@
 </div>
 
 <div class="container" id="content">
+	<div class="row text-center stat-band" id="hero-stats"></div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Downloads per year</h3>
+			<svg id="downloads-per-year-d3"></svg>
+		</div>
+	</div>
+
 	<div class="row">
 		<div class="col-md-4" style="vertical-align: top">
 			<h3>Downloads per server</h3> <small><a href="http://d3pie.org/#generator">Bake your own pie</a></small>
@@ -63,8 +72,8 @@
 			<h3>Cluster Dendrogram</h3>
 			<div>
 				Amount of downloads (▼), worlds played and last dowload date for all players per server.
-				<br>Bigger circle equals more downloads. Darker blue indicates a more recent last download.
-				Gray is over a month ago.
+				<br>Bigger circle equals more downloads. Darker blue indicates a more recent last download,
+				aqua the oldest.
 			</div>
 			<svg id="dendrogram"></svg>
 		</div>
@@ -87,6 +96,8 @@
 
 <script src="d3/worldmap.js"></script>
 
+<script src="d3/overview.js"></script>
+
 <script type="text/javascript">
 	var unknownPlayerOrTribe = '???';
 	$.get('api.php', function(data) {
@@ -100,6 +111,8 @@
 		//console.log(data[0]);
 		//serverUsage(data); // NOT IN USE: BarChart, not as cool as the PieChart
 
+		heroStats(data);
+		downloadsPerYear(data);
 		worldMap(data);
 		circlePacking(data);
 		serverUsagePie(data);
