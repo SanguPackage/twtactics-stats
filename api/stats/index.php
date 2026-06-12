@@ -12,11 +12,13 @@ if ($mysqli->connect_errno) {
 	$downloads = [];
 	$users = [];
 
+	// The 30 most recent days that had downloads (not a calendar month), so the table
+	// stays populated even when the latest activity is older than a month.
 	$query =
 		"SELECT DATE_FORMAT(downloaddate, '%Y-%m-%d') AS day, count(0) AS amount FROM twsnapshotdownloads
-		WHERE downloaddate > NOW() - INTERVAL 1 MONTH
 		GROUP BY DATE_FORMAT(downloaddate, '%Y-%m-%d')
-		ORDER BY DATE_FORMAT(downloaddate, '%Y-%m-%d') DESC";
+		ORDER BY DATE_FORMAT(downloaddate, '%Y-%m-%d') DESC
+		LIMIT 30";
 
 	if ($result = $mysqli->query($query)) {
 		while ($row = $result->fetch_assoc()) {
