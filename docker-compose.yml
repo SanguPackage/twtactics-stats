@@ -1,0 +1,41 @@
+# tw-stats.sangu.be — PHP app + MariaDB.
+# Coolify: deploy this repo as an application, set the domain to tw-stats.sangu.be in
+# the UI (it injects Traefik routing + TLS). The host port below is for local testing only.
+# Move the DB credentials to Coolify secrets in production.
+services:
+  php:
+    build: .
+    container_name: tw-stats
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      DB_HOST: mariadb
+      DB_NAME: sangu_betwtactics
+      DB_USER: sangu_betwtactics
+      DB_PASS: TheSanguPackageCheaperHosting
+    ports:
+      - "8082:80"
+
+  mariadb:
+    image: mariadb:10.11
+    container_name: tw-stats-db
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: sangu_betwtactics
+      MARIADB_USER: sangu_betwtactics
+      MARIADB_PASSWORD: TheSanguPackageCheaperHosting
+      MARIADB_ROOT_PASSWORD: change-me-in-coolify
+    volumes:
+      - twstats_db:/var/lib/mysql
+      # Runs once on first boot to create the schema + import the ~16.5k rows.
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+volumes:
+  twstats_db:

@@ -1,10 +1,10 @@
 <?php
 function get_mysqli() {
-	$host = 'sangu.be.mysql';
-	$username = 'sangu_betwtactics';
-	$password = '';
-	$dbname = 'sangu_betwtactics';
-	$port = 3306;
+	$host = getenv('DB_HOST') ?: 'sangu.be.mysql';
+	$username = getenv('DB_USER') ?: 'sangu_betwtactics';
+	$password = getenv('DB_PASS') ?: 'TheSanguPackageCheaperHosting';
+	$dbname = getenv('DB_NAME') ?: 'sangu_betwtactics';
+	$port = (int) (getenv('DB_PORT') ?: 3306);
 
 	if ($_SERVER["REMOTE_ADDR"] != "127.0.0.1" && $_SERVER["REMOTE_ADDR"] != "::1") {
 		$port = 3306;
