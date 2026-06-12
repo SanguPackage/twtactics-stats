@@ -7,6 +7,11 @@ if ($mysqli->connect_errno) {
 	echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 
 } else {
+	// Default to empty so the template renders empty tables instead of warning when a
+	// query returns no rows (e.g. no downloads within the last month).
+	$downloads = [];
+	$users = [];
+
 	$query =
 		"SELECT DATE_FORMAT(downloaddate, '%Y-%m-%d') AS day, count(0) AS amount FROM twsnapshotdownloads
 		WHERE downloaddate > NOW() - INTERVAL 1 MONTH
