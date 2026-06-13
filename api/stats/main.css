@@ -35,3 +35,23 @@ h2 {
 .bar:hover {
 	fill: #26D0CE !important;
 }
+
+/* "back to the main site" pill in the page header */
+.home-link, .home-link:hover, .home-link:focus {
+	color: #fff;
+	text-decoration: none;
+}
+.home-link {
+	display: inline-block;
+	margin-top: 6px;
+	padding: 6px 18px;
+	border-radius: 20px;
+	font-weight: bold;
+	background: linear-gradient(135deg, #1A2980, #26D0CE);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+	transition: transform .1s ease, box-shadow .1s ease;
+}
+.home-link:hover, .home-link:focus {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, .35);
+}

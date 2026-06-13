@@ -2,6 +2,7 @@
 
 <div class="jumbotron">
 	<div class="container">
+		<a href="https://tribalwars.sangu.be" class="home-link pull-right">&larr; tribalwars.sangu.be</a>
 		<h1>TW Tactics &mdash; <?=$totals['firstYear']?>&ndash;<?=$totals['lastYear']?></h1>
 		<p><?=number_format($totals['downloads'])?> snapshot downloads over <?=$totals['lastYear'] - $totals['firstYear']?> years. <a href="d3.html">(D3.js version)</a></p>
 	</div>
