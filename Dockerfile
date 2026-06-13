@@ -11,6 +11,8 @@ FROM php:8.3-apache
 RUN docker-php-ext-install mysqli
 COPY api/ /var/www/html/
 COPY --from=vendor /app/vendor/ /var/www/html/stats/vendor/
+# Serve the stats dashboard at / while keeping the root ingestion endpoints reachable.
+COPY apache-vhost.conf /etc/apache2/sites-available/000-default.conf
 EXPOSE 80
 
 # Coolify reads this to gate traffic. Uses PHP (always present) instead of curl/wget
