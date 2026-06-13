@@ -1,7 +1,8 @@
 # tw-stats.sangu.be — PHP app + MariaDB.
 # Coolify: deploy this repo as an application, set the domain to tw-stats.sangu.be in
-# the UI (it injects Traefik routing + TLS). The host port below is for local testing only.
-# Move the DB credentials to Coolify secrets in production.
+# the UI (it injects Traefik routing + TLS).
+# Secrets (${...}) come from env: Coolify injects them per-app in prod; locally use a
+# git-ignored .env beside this file (see .env.example).
 services:
   php:
     build: .
@@ -14,7 +15,7 @@ services:
       DB_HOST: mariadb
       DB_NAME: sangu_betwtactics
       DB_USER: sangu_betwtactics
-      DB_PASS: TheSanguPackageCheaperHosting
+      DB_PASS: ${TWSTATS_DB_PASSWORD}
 
   mariadb:
     # Seed (db/init/*.sql) is baked into the image — Coolify compose deploys don't
@@ -26,8 +27,8 @@ services:
     environment:
       MARIADB_DATABASE: sangu_betwtactics
       MARIADB_USER: sangu_betwtactics
-      MARIADB_PASSWORD: TheSanguPackageCheaperHosting
-      MARIADB_ROOT_PASSWORD: change-me-in-coolify
+      MARIADB_PASSWORD: ${TWSTATS_DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${TWSTATS_ROOT_PASSWORD}
     volumes:
       - twstats_db:/var/lib/mysql
     healthcheck:
