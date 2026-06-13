@@ -17,7 +17,10 @@ services:
       DB_PASS: TheSanguPackageCheaperHosting
 
   mariadb:
-    image: mariadb:10.11
+    # Seed (db/init/*.sql) is baked into the image — Coolify compose deploys don't
+    # populate relative bind mounts from the repo, so /docker-entrypoint-initdb.d
+    # was empty and the ~16.5k-row import never ran. Building it in fixes that.
+    build: ./db
     container_name: tw-stats-db
     restart: unless-stopped
     environment:
@@ -27,8 +30,6 @@ services:
       MARIADB_ROOT_PASSWORD: change-me-in-coolify
     volumes:
       - twstats_db:/var/lib/mysql
-      # Runs once on first boot to create the schema + import the ~16.5k rows.
-      - ./db/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 5s
