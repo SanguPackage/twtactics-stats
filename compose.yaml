@@ -15,8 +15,6 @@ services:
       DB_NAME: sangu_betwtactics
       DB_USER: sangu_betwtactics
       DB_PASS: TheSanguPackageCheaperHosting
-    ports:
-      - "8082:80"
 
   mariadb:
     image: mariadb:10.11
