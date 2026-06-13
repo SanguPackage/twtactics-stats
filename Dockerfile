@@ -12,3 +12,8 @@ RUN docker-php-ext-install mysqli
 COPY api/ /var/www/html/
 COPY --from=vendor /app/vendor/ /var/www/html/stats/vendor/
 EXPOSE 80
+
+# Coolify reads this to gate traffic. Uses PHP (always present) instead of curl/wget
+# (not in the base image) so the probe exercises the full Apache + PHP path.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD php -r 'exit(@file_get_contents("http://127.0.0.1/health.php") === "ok" ? 0 : 1);'
